@@ -1,12 +1,26 @@
 # PDF Merger Application
 
-This project is a simple web application that allows users to upload multiple PDF files, merge them into a single PDF file, and download the resulting file. It utilizes the `pdf-lib` library for PDF manipulation.
+This project is a secure web application that allows users to upload multiple PDF files, merge them into a single PDF file, and download the resulting file. The application processes all files locally in your browser - nothing is uploaded to any server. It utilizes the `pdf-lib` library for PDF manipulation and offers complete privacy.
 
 ## Features
 
-- Upload multiple PDF files
-- Merge uploaded PDF files into one
+- Upload multiple PDF files via drag-and-drop or file selection dialog
+- Reorder files to control the sequence of the merged document
+- Preview PDFs before and after merging 
+- Merge uploaded PDF files into one document
 - Download the merged PDF file
+- Complete privacy - all processing happens in your browser
+- No file size limits beyond browser constraints
+- Mobile-friendly responsive design
+- No registration or login required
+
+## Privacy & Security
+
+- **Zero server uploads** - All PDF processing happens directly in your browser
+- **No data collection** - We don't use cookies or tracking technologies
+- **Network monitoring** - Visual indicators show when network requests occur
+- **Strict Content Security Policy** - Prevents unauthorized code execution
+- **Open source** - Code is transparent and can be audited
 
 ## Project Structure
 
