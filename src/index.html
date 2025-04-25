@@ -180,24 +180,12 @@
             }
         });
         
-        // Add visible indicator of offline processing
-        const networkIndicator = document.createElement('div');
-        networkIndicator.className = 'network-indicator';
-        networkIndicator.innerHTML = '<span class="network-status online">✓ Offline Processing Active</span>';
-        document.body.appendChild(networkIndicator);
+        // Remove the offline processing indicator code
         
-        // Monitor network requests to ensure transparency
+        // Monitor network requests without offline messaging
         const originalFetch = window.fetch;
         window.fetch = function() {
-            const indicator = document.querySelector('.network-status');
-            if (indicator) {
-                indicator.textContent = "⚠️ Network Request Detected";
-                indicator.classList.remove('online');
-                setTimeout(() => {
-                    indicator.textContent = "✓ Offline Processing Active";
-                    indicator.classList.add('online');
-                }, 3000);
-            }
+            console.log("Network request detected");
             return originalFetch.apply(this, arguments);
         };
     </script>
