@@ -96,6 +96,14 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     
+    // Show loading state immediately
+    const originalText = mergeButton.textContent;
+    mergeButton.disabled = true;
+    mergeButton.innerHTML = '<span class="spinner-small"></span> Merging...';
+    
+    // Show the loading overlay
+    document.getElementById('loading-overlay').classList.remove('hidden');
+    
     try {
       uiController.showLoading();
       uiController.resetPdfPreview();
@@ -125,6 +133,10 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('Error in merge process:', error);
       alert('Failed to merge PDFs: ' + error.message);
     } finally {
+      // Reset button and hide loading overlay
+      mergeButton.disabled = false;
+      mergeButton.textContent = originalText;
+      document.getElementById('loading-overlay').classList.add('hidden');
       uiController.hideLoading();
     }
   });
