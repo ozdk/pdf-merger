@@ -1,17 +1,22 @@
 {
   "name": "pdf-merger",
   "version": "1.0.0",
-  "description": "A web application that allows users to upload PDF files, merge them into one PDF, and download the merged file.",
+  "description": "Browser-based PDF merger",
   "main": "src/js/app.js",
   "scripts": {
-    "start": "live-server src",
-    "build": "echo 'No build process defined'"
+    "start": "npx serve src",
+    "lint": "eslint src/js/**/*.js",
+    "update-deps": "npm-check-updates -u && npm install"
   },
   "dependencies": {
-    "pdf-lib": "^1.17.1"
+    "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^3.11.174"
   },
   "devDependencies": {
-    "live-server": "^1.2.1"
+    "live-server": "^1.2.1",
+    "eslint": "^8.56.0",
+    "npm-check-updates": "^16.14.6",
+    "serve": "^14.2.1"
   },
   "keywords": [
     "pdf",

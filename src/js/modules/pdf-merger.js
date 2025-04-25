@@ -1,7 +1,9 @@
+import { readFileAsArrayBuffer } from '../utils/file-utils.js';
+
 /**
  * PDF merging functionality
  */
-class PDFMerger {
+export class PDFMerger {
   constructor() {
     // Configure PDF.js worker if available
     if (typeof pdfjsLib !== 'undefined') {
@@ -9,17 +11,7 @@ class PDFMerger {
     }
   }
   
-  /**
-   * Helper function to read file as ArrayBuffer
-   */
-  readFileAsArrayBuffer(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = reject;
-      reader.readAsArrayBuffer(file);
-    });
-  }
+  // Remove the duplicate readFileAsArrayBuffer method
   
   /**
    * Merge multiple PDF files
@@ -51,8 +43,8 @@ class PDFMerger {
         console.log(`Processing file ${i+1}/${files.length}: ${file.name}`);
         
         try {
-          // Use the helper function instead of direct arrayBuffer() call
-          const fileArrayBuffer = await this.readFileAsArrayBuffer(file);
+          // Use the imported function instead
+          const fileArrayBuffer = await readFileAsArrayBuffer(file);
           const pdfDoc = await PDFLib.PDFDocument.load(fileArrayBuffer);
           const pages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
           
