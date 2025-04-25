@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Security headers -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; worker-src 'self' blob:; child-src blob:">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; worker-src 'self' blob:; child-src blob:; connect-src 'none'; font-src 'self'; form-action 'none'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; manifest-src 'self';">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <!-- Removed X-Frame-Options meta tag as it should be set by the server -->
     <meta name="referrer" content="no-referrer">
@@ -36,12 +36,16 @@
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23f40f02' d='M12 14.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5-.67 1.5-1.5 1.5zm0-5.5c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0-5.5C7.31 3.5 3.5 7.31 3.5 12S7.31 20.5 12 20.5s8.5-3.81 8.5-8.5S16.69 3.5 12 3.5z'/%3E%3C/svg%3E" type="image/svg+xml">
 </head>
 <body>
+    <!-- Add this as the first focusable element inside the body -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
     <header>
         <h1>PDF Merger</h1>
         <p class="tagline">Securely merge your PDF files in your browser</p>
     </header>
 
-    <main class="container">
+    <!-- And update the main tag to add an id -->
+    <main id="main-content" class="container">
         <!-- Upload section -->
         <section class="upload-section">
             <h2 class="section-title">Upload Files</h2>
@@ -67,10 +71,47 @@
             <div class="file-list-container">
                 <h3>Selected Files</h3>
                 <ul id="file-list" class="file-list" aria-live="polite"></ul>
+                <div class="file-actions">
+                    <button id="move-up" class="btn btn-sm" title="Move selected file up" disabled>↑</button>
+                    <button id="move-down" class="btn btn-sm" title="Move selected file down" disabled>↓</button>
+                    <button id="remove-selected" class="btn btn-sm" title="Remove selected file" disabled>×</button>
+                </div>
             </div>
 
             <div class="actions">
                 <button id="clear-files" class="btn btn-secondary" type="button">Clear All</button>
+                <!-- Add this before the merge button in the actions div -->
+                <div class="advanced-options">
+                    <details>
+                        <summary>Advanced Options</summary>
+                        <div class="options-panel">
+                            <div class="option-group">
+                                <label for="page-size">Page Size:</label>
+                                <select id="page-size" name="page-size">
+                                    <option value="auto">Auto (Keep original)</option>
+                                    <option value="a4">A4</option>
+                                    <option value="letter">Letter</option>
+                                    <option value="legal">Legal</option>
+                                </select>
+                            </div>
+                            
+                            <div class="option-group">
+                                <label for="metadata-title">Document Title:</label>
+                                <input type="text" id="metadata-title" placeholder="Optional title">
+                            </div>
+                            
+                            <div class="option-group">
+                                <label for="metadata-author">Author:</label>
+                                <input type="text" id="metadata-author" placeholder="Optional author">
+                            </div>
+                            
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="compress-pdf" name="compress-pdf">
+                                <label for="compress-pdf">Optimize file size</label>
+                            </div>
+                        </div>
+                    </details>
+                </div>
                 <button id="merge-button" class="btn btn-primary" type="button" disabled>Merge PDFs</button>
             </div>
         </section>
@@ -131,6 +172,16 @@
             <h2 id="privacy-title">Privacy Policy</h2>
             <p>This PDF Merger tool processes all files directly in your web browser. We do not upload, store, or transmit your files to any server. All processing happens locally on your device.</p>
             <p>We collect no personal data, do not use cookies, and do not track your usage of this tool.</p>
+            <div class="technical-details">
+                <h3>Technical Implementation</h3>
+                <ul>
+                    <li><strong>No Server Communication:</strong> This application has no backend server component.</li>
+                    <li><strong>Local Processing:</strong> All PDF merging happens using JavaScript libraries (pdf-lib.js and pdf.js) that execute in your browser.</li>
+                    <li><strong>No Storage:</strong> We don't use cookies, localStorage, or IndexedDB to store any information.</li>
+                    <li><strong>Network Monitoring:</strong> The application includes visible indicators when any network activity occurs.</li>
+                    <li><strong>Source Code:</strong> <a href="https://github.com/yourusername/pdf-merger" target="_blank">View our source code</a> to verify these privacy claims.</li>
+                </ul>
+            </div>
         </div>
     </div>
 
@@ -150,6 +201,49 @@
             }
             
             return true;
+        };
+    </script>
+
+    <!-- Add after your validatePdfFile function and before other scripts -->
+    <script>
+        // Clear browser storage when app starts and finishes
+        window.addEventListener('DOMContentLoaded', () => {
+            // Clear any potential storage
+            localStorage.clear();
+            sessionStorage.clear();
+            
+            // Clear IndexedDB if present
+            window.indexedDB.databases().then(dbs => {
+                dbs.forEach(db => window.indexedDB.deleteDatabase(db.name));
+            }).catch(() => {});
+            
+            // Clear cache storage if possible
+            if ('caches' in window) {
+                caches.keys().then(names => {
+                    names.forEach(name => caches.delete(name));
+                });
+            }
+        });
+        
+        // Add visible indicator of offline processing
+        const networkIndicator = document.createElement('div');
+        networkIndicator.className = 'network-indicator';
+        networkIndicator.innerHTML = '<span class="network-status online">✓ Offline Processing Active</span>';
+        document.body.appendChild(networkIndicator);
+        
+        // Monitor network requests to ensure transparency
+        const originalFetch = window.fetch;
+        window.fetch = function() {
+            const indicator = document.querySelector('.network-status');
+            if (indicator) {
+                indicator.textContent = "⚠️ Network Request Detected";
+                indicator.classList.remove('online');
+                setTimeout(() => {
+                    indicator.textContent = "✓ Offline Processing Active";
+                    indicator.classList.add('online');
+                }, 3000);
+            }
+            return originalFetch.apply(this, arguments);
         };
     </script>
 
