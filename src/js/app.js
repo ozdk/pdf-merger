@@ -456,3 +456,58 @@ document.addEventListener('DOMContentLoaded', () => {
   // Set up move buttons (up/down)
   setupMoveButtons();
 });
+
+/**
+ * Privacy Policy Dialog Functionality
+ */
+document.addEventListener('DOMContentLoaded', function() {
+    // Get elements
+    const privacyLink = document.getElementById('privacy-link');
+    const privacyModal = document.getElementById('privacy-modal');
+    const closeModalBtn = privacyModal ? privacyModal.querySelector('.close-modal') : null;
+    
+    // Handle privacy dialog interactions
+    if (privacyLink && privacyModal) {
+        // Open modal when clicking privacy link
+        privacyLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Use showModal() for proper dialog behavior
+            if (typeof privacyModal.showModal === 'function') {
+                privacyModal.showModal();
+            } else {
+                // Fallback for browsers that don't support dialog
+                privacyModal.classList.add('fallback-modal');
+                privacyModal.style.display = 'flex';
+            }
+        });
+        
+        // Close modal when clicking close button
+        if (closeModalBtn) {
+            closeModalBtn.addEventListener('click', function() {
+                if (typeof privacyModal.close === 'function') {
+                    privacyModal.close();
+                } else {
+                    // Fallback
+                    privacyModal.classList.remove('fallback-modal');
+                    privacyModal.style.display = 'none';
+                }
+            });
+        }
+        
+        // Close modal when clicking backdrop (for native dialog)
+        privacyModal.addEventListener('click', function(e) {
+            // Check if the click was on the dialog backdrop (not its content)
+            if (e.target === privacyModal) {
+                privacyModal.close();
+            }
+        });
+        
+        // Add escape key support
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && privacyModal.open) {
+                privacyModal.close();
+            }
+        });
+    }
+});
