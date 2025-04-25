@@ -3,13 +3,14 @@
   --primary-color: #2563eb;
   --primary-hover: #1d4ed8;
   --secondary-color: #64748b;
-  --success-color: #10b981;
+  --success-color: #4ade80;
+  --success-hover: #22c55e;
   --danger-color: #ef4444;
   --warning-color: #f59e0b;
   --background-color: #f8fafc;
   --card-background: #ffffff;
-  --border-color: #e2e8f0;
-  --text-color: #334155;
+  --border-color: #d1d5db;
+  --text-color: #333333;
   --text-muted: #64748b;
   --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   --border-radius: 8px;
@@ -116,12 +117,17 @@ h1 {
   background-color: var(--card-background);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  height: 700px; /* Fixed height for both sections */
+  position: relative; /* For absolute positioned buttons */
+  padding-bottom: 70px; /* Make room for buttons */
 }
 
 .section-title {
-  margin-bottom: 1.5rem;
-  font-size: 1.5rem;
-  color: var(--text-color);
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  color: #111827;
   position: relative;
 }
 
@@ -130,16 +136,20 @@ h1 {
   position: absolute;
   bottom: -8px;
   left: 0;
-  width: 60px;
+  width: 40px;
   height: 3px;
-  background-color: #f40f02;
+  background-color: #ef4444; /* Red underline */
 }
 
 /* Drop zone styles */
 .drop-zone {
-  border: 2px dashed var(--border-color);
-  border-radius: var(--border-radius);
-  padding: 3rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  border: 2px dashed #d1d5db;
+  border-radius: 8px;
   text-align: center;
   cursor: pointer;
   transition: var(--transition);
@@ -180,13 +190,14 @@ h1 {
   background-color: var(--primary-hover);
 }
 
-/* Improved file list container */
+/* Fix file list container to maintain exact dimensions */
 .file-list-container {
   margin: 20px 0;
   padding: 15px;
   background-color: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  height: 220px; /* Fixed height to maintain consistent layout */
 }
 
 /* Header with file counter */
@@ -201,32 +212,39 @@ h1 {
 
 .file-counter-label {
   font-weight: 600;
-  color: #333;
+  color: #111827;
 }
 
 .file-counter {
   font-size: 13px;
-  color: #666;
+  color: #6b7280;
 }
 
-/* Side-by-side layout for files and controls */
+/* Side-by-side layout for files and controls - fixed height */
 .file-management-layout {
   display: flex;
   gap: 15px;
-  min-height: 100px;
+  height: 150px; /* Fixed height */
+  min-height: 150px;
+  max-height: 150px;
 }
 
-/* File list wrapper takes most of the space */
+/* File list wrapper takes most of the space - fixed height */
 .file-list-wrapper {
   flex: 1;
   min-width: 0; /* Prevents overflow */
+  height: 126px; /* Match file list height */
+  min-height: 126px;
+  max-height: 126px;
 }
 
-/* File list styling */
+/* File list styling - fixed at exactly 3 files */
 .file-list {
-  max-height: 200px;
-  min-height: 100px;
+  height: 126px; /* Height for exactly 3 files (3 * 42px per item) */
+  min-height: 126px;
+  max-height: 126px;
   overflow-y: auto;
+  overflow-x: hidden;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -235,14 +253,35 @@ h1 {
   background-color: white;
 }
 
-/* File list items */
+/* Ensure scrollbar appears properly */
+.file-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.file-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 0 6px 6px 0;
+}
+
+.file-list::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.file-list::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Ensure file list items have consistent height */
 .file-list li {
+  height: 42px; /* Fixed height for each item */
   padding: 10px;
   border-bottom: 1px solid #f0f0f0;
   cursor: pointer;
   display: flex;
   align-items: center;
   position: relative;
+  width: 100%;
 }
 
 .file-list li:last-child {
@@ -259,9 +298,13 @@ h1 {
   padding-left: 7px; /* Adjust padding when border is added */
 }
 
+/* Special case for the empty list message */
 .file-list li.empty-list {
+  height: 126px; /* Match the height of 3 items */
+  display: flex;
   justify-content: center;
-  padding: 30px 10px;
+  align-items: center;
+  padding: 0;
   font-style: italic;
   color: #999;
   cursor: default;
@@ -333,17 +376,17 @@ h1 {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #f0f0f0;
+  background-color: #f9f9f9;
   border-radius: 8px;
   padding: 10px;
-  width: 60px; /* Fixed width for controls */
+  width: 70px; /* Fixed width for controls */
 }
 
 .reorder-title {
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   font-weight: 500;
-  color: #555;
-  font-size: 0.8rem;
+  color: #6b7280;
+  font-size: 12px;
   text-align: center;
 }
 
@@ -382,16 +425,19 @@ h1 {
 }
 
 /* Align buttons horizontally */
-.actions {
+.actions, .download-actions {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
   display: flex;
-  justify-content: space-between;
-  margin-top: 1.5rem;
+  justify-content: space-between; /* This spreads buttons apart */
+  width: calc(100% - 40px); /* Account for left/right padding */
 }
 
-.download-actions {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 1.5rem;
+/* Remove the auto margin that's causing misalignment */
+.actions button:first-child {
+  margin-right: 0; /* Remove the auto margin */
 }
 
 /* Make buttons consistent */
@@ -431,9 +477,15 @@ h1 {
 }
 
 /* Button styles */
-.btn-primary, .btn-success {
+.btn-primary, .btn-success, .btn-outline {
   min-width: 140px;
   text-align: center;
+  padding: 12px 20px;
+  width: 140px;
+}
+
+.btn-primary, .btn-success {
+  width: 140px; /* Set exact width */
 }
 
 .btn-primary {
@@ -447,8 +499,12 @@ h1 {
 
 .btn-outline {
   background-color: transparent;
-  border: 1px solid #ccc;
-  color: #555;
+  border: 1px solid #d1d5db;
+  color: #4b5563;
+  min-width: 140px;
+  text-align: center;
+  padding: 12px 20px;
+  width: 140px; /* Set exact width */
 }
 
 .btn-outline:hover {
@@ -461,6 +517,8 @@ h1 {
   color: white;
   width: auto;
   min-width: 180px;
+  margin-left: 0; /* Remove the auto margin */
+  margin-right: 0; /* Ensure no right margin */
 }
 
 .btn:disabled, .btn.disabled {
@@ -474,11 +532,12 @@ h1 {
 /* PDF preview styles */
 .pdf-preview {
   width: 100%;
-  height: 500px;
+  flex: 1; /* Take up remaining space */
   min-height: 450px;
+  max-height: 500px; /* Cap maximum height */
   overflow: hidden;
   border-radius: 8px;
-  margin-bottom: 10px;
+  margin-bottom: 70px;
   transition: all 0.3s ease;
 }
 
@@ -489,14 +548,17 @@ h1 {
 }
 
 .no-preview-message {
-  text-align: center;
-  color: #777;
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #9ca3af;
 }
 
 .no-preview-message svg {
-  opacity: 0.4;
-  margin-bottom: 15px;
+  color: #d1d5db;
+  margin-bottom: 1rem;
 }
 
 /* Results section states */
@@ -537,29 +599,28 @@ h1 {
   height: 100%;
 }
 
-/* Download info */
+/* Download info with consistent spacing */
 .download-info {
-  margin-top: 15px;
-  width: 100%;
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  margin-top: 0; /* Override previous margin */
+  width: calc(100% - 40px); /* Match the actions width */
 }
 
+/* File info consistency */
 #file-info {
   font-size: 14px;
   color: #666;
-  margin-bottom: 10px;
+  margin: 10px 0;
+  text-align: right;
   display: block;
-  width: 100%;
-}
-
-.download-actions {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  margin-top: 1.5rem;
-}
-
-.download-actions .btn {
-  margin: 0;
+  width: auto;
+  position: absolute;
+  bottom: 60px;
+  right: 20px;
+  z-index: 1; /* Ensure it's above other elements */
 }
 
 /* Loading overlay */
@@ -690,7 +751,7 @@ h1 {
 
 .btn-primary:not(:disabled), 
 .btn-success:not(.disabled) {
-  animation: pulse-button 2s infinite;
+  animation: none;
 }
 
 /* Utility classes */
@@ -728,6 +789,8 @@ h1 {
   
   .upload-section, .results-section {
     padding: 1.5rem;
+    height: auto; /* Allow height to be flexible on mobile */
+    min-height: 500px; /* But maintain minimum height */
   }
   
   .actions {
@@ -757,6 +820,11 @@ h1 {
   .pdf-preview {
     height: 300px;
   }
+  
+  .file-list-container {
+    height: auto; /* Allow more flexibility on mobile */
+    max-height: 300px; /* But cap maximum height */
+  }
 }
 
 @media (max-width: 480px) {
@@ -772,4 +840,55 @@ h1 {
   .section-title {
     font-size: 1.5rem;
   }
+}
+
+/* Button container styling - consistent across both panels */
+.actions {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  display: flex;
+  justify-content: space-between;
+  width: calc(100% - 40px);
+}
+
+/* Spacer element to replace the first button in download section */
+.spacer {
+  width: 140px; /* Same width as the Clear All button */
+  visibility: hidden;
+}
+
+/* File info styling - positioned above buttons */
+#file-info {
+  position: absolute;
+  bottom: 60px;
+  right: 20px;
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+}
+
+/* Button styling - ensure consistent sizing */
+.btn {
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-weight: 500;
+  width: 140px;
+  text-align: center;
+}
+
+/* Success button styling */
+.btn-success {
+  background-color: var(--success-color);
+  color: white;
+}
+
+.btn-success:hover:not(.disabled) {
+  background-color: var(--success-hover);
+}
+
+/* PDF preview needs margin to not overlap with buttons */
+.pdf-preview {
+  margin-bottom: 70px;
 }
