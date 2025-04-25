@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
     dropZone.classList.remove('active');
     fileManager.addFiles(e.dataTransfer.files);
+    updateMergeButtonState();
   });
   
   dropZone.addEventListener('click', (e) => {
@@ -49,6 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // File input change handler
   fileInput.addEventListener('change', (e) => {
     fileManager.addFiles(e.target.files);
+    updateMergeButtonState();
   });
   
   // File list event delegation
@@ -74,6 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.target.closest('.delete-file')) {
       const index = parseInt(e.target.closest('li').getAttribute('data-index'));
       fileManager.deleteFile(index);
+      updateMergeButtonState();
     }
   });
   
@@ -130,5 +133,23 @@ document.addEventListener('DOMContentLoaded', () => {
   clearFilesButton.addEventListener('click', () => {
     fileManager.clearFiles();
     uiController.resetPdfPreview();
+    updateMergeButtonState();
   });
 });
+
+/**
+ * Updates the merge button state based on number of uploaded files
+ */
+function updateMergeButtonState() {
+  const fileList = document.getElementById('file-list');
+  const mergeButton = document.getElementById('merge-button');
+  
+  // Only enable the merge button if 2 or more files are uploaded
+  if (fileList.children.length >= 2) {
+    mergeButton.disabled = false;
+    mergeButton.setAttribute('aria-disabled', 'false');
+  } else {
+    mergeButton.disabled = true;
+    mergeButton.setAttribute('aria-disabled', 'true');
+  }
+}
