@@ -135,6 +135,26 @@ document.addEventListener('DOMContentLoaded', () => {
     uiController.resetPdfPreview();
     updateMergeButtonState();
   });
+
+  // Handle About modal
+  const aboutLink = document.getElementById('about-link');
+  const aboutModal = document.getElementById('about-modal');
+  const closeAboutModal = aboutModal.querySelector('.close-modal');
+
+  aboutLink.addEventListener('click', () => {
+      aboutModal.showModal();
+  });
+
+  closeAboutModal.addEventListener('click', () => {
+      aboutModal.close();
+  });
+
+  // Close modal when clicking outside of it
+  aboutModal.addEventListener('click', (e) => {
+      if (e.target === aboutModal) {
+          aboutModal.close();
+      }
+  });
 });
 
 /**
