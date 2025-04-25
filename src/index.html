@@ -123,9 +123,6 @@
                         </div>
                     </div>
                     
-                    <!-- File size info - hidden initially -->
-                    <p id="file-info" class="file-info hidden">File size: <span id="file-size">--</span></p>
-                    
                     <!-- Replace the entire download-info section with this simpler structure -->
                     <div class="actions">
                         <!-- Empty button to match the Clear All positioning -->
@@ -155,8 +152,7 @@
     <!-- Scripts -->
     <script src="lib/pdf-lib.min.js" defer></script>
     <script src="lib/pdf.js" defer></script>
-    <script src="js/fileUtils.js" defer></script>
-    <script src="js/pdfMerger.js" defer></script>
-    <script src="js/app.js" defer></script>
+    <!-- Add type="module" to use ES modules -->
+    <script type="module" src="js/app.js"></script>
 </body>
 </html>
