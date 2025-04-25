@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Security headers -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self'; img-src 'self' data:; worker-src 'self' blob:; child-src blob:">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; worker-src 'self' blob:; child-src blob:">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="DENY">
+    <!-- Removed X-Frame-Options meta tag as it should be set by the server -->
     <meta name="referrer" content="no-referrer">
     
     <title>PDF Merger | Secure Document Merging</title>
     <meta name="description" content="Securely merge multiple PDF files into one document without uploading them to any server">
     
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23f40f02' d='M12 14.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm0-5.5c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0-5.5C7.31 3.5 3.5 7.31 3.5 12S7.31 20.5 12 20.5s8.5-3.81 8.5-8.5S16.69 3.5 12 3.5z'/%3E%3C/svg%3E" type="image/svg+xml">
 </head>
 <body>
     <header>
