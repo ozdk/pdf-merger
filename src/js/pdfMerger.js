@@ -9,42 +9,43 @@ const pdfMerger = {
    */
   async mergePDFs(pdfFiles) {
     try {
+      console.log(`Starting to merge ${pdfFiles.length} PDF files in specified order`);
+      
+      // Validate files
+      if (!pdfFiles || pdfFiles.length === 0) {
+        throw new Error('No files provided for merging');
+      }
+      
+      // Make sure all files are valid
+      pdfFiles.forEach((file, i) => {
+        if (!file) {
+          throw new Error(`File at position ${i+1} is undefined`);
+        }
+        if (!file.name) {
+          throw new Error(`File at position ${i+1} is not a valid File object`);
+        }
+      });
+      
       // Create a new PDF document
       const mergedPdf = await PDFLib.PDFDocument.create();
       
-      // Process each file
-      for (const pdfFile of pdfFiles) {
-        try {
-          // Read the file as an ArrayBuffer
-          const pdfBytes = await pdfFile.arrayBuffer();
-          
-          // Load the PDF document
-          const pdf = await PDFLib.PDFDocument.load(pdfBytes, { 
-            ignoreEncryption: true 
-          });
-          
-          // Get page indices
-          const indices = Array.from(
-            { length: pdf.getPageCount() }, 
-            (_, i) => i
-          );
-          
-          // Copy pages to the merged PDF
-          const copiedPages = await mergedPdf.copyPages(pdf, indices);
-          copiedPages.forEach(page => mergedPdf.addPage(page));
-        } catch (fileError) {
-          console.error(`Error processing file ${pdfFile.name}:`, fileError);
-          throw new Error(`Could not process ${pdfFile.name}: ${fileError.message}`);
-        }
+      // Process files in the order they appear in the array
+      for (let i = 0; i < pdfFiles.length; i++) {
+        const pdfFile = pdfFiles[i];
+        console.log(`Processing file ${i+1}/${pdfFiles.length}: ${pdfFile.name}`);
+        
+        const pdfBytes = await readFileAsArrayBuffer(pdfFile);
+        const pdf = await PDFLib.PDFDocument.load(pdfBytes);
+        const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+        copiedPages.forEach(page => mergedPdf.addPage(page));
       }
       
-      // Save the merged PDF
-      const mergedPdfBytes = await mergedPdf.save();
-      
-      return mergedPdfBytes;
+      console.log('PDF merge completed successfully');
+      const mergedPdfFile = await mergedPdf.save();
+      return mergedPdfFile;
     } catch (error) {
       console.error('Error merging PDFs:', error);
-      throw new Error('Failed to merge PDF files: ' + error.message);
+      throw error;
     }
   },
   
@@ -106,3 +107,5 @@ const pdfMerger = {
     }
   }
 };
+
+// Remove the standalone mergePdfs function - it's duplicating functionality

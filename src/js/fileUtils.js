@@ -48,3 +48,17 @@ const fileUtils = {
     return filename.split('.').pop().toLowerCase();
   }
 };
+
+/**
+ * Reads a File object as an ArrayBuffer
+ * @param {File} file - The file to read
+ * @returns {Promise<ArrayBuffer>} - Promise resolving to the file's contents as ArrayBuffer
+ */
+function readFileAsArrayBuffer(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(new Error(`Failed to read file: ${file.name}`));
+    reader.readAsArrayBuffer(file);
+  });
+}

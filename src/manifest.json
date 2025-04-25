@@ -1,0 +1,16 @@
+{
+  "name": "PDF Merger",
+  "short_name": "PDF Merger",
+  "description": "Securely merge multiple PDF files in your browser",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#f40f02",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23f40f02' d='M12 14.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm0-5.5c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0-5.5C7.31 3.5 3.5 7.31 3.5 12S7.31 20.5 12 20.5s8.5-3.81 8.5-8.5S16.69 3.5 12 3.5z'/%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    }
+  ]
+}

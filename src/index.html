@@ -9,6 +9,7 @@
     <meta name="referrer" content="no-referrer">
     <meta name="theme-color" content="#f40f02">
     <link rel="manifest" href="manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="PDF Merger">
@@ -26,171 +27,133 @@
 </head>
 <body>
     <header>
-        <h1>PDF Merger</h1>
-        <p class="tagline">Securely merge your PDF files in your browser</p>
+        <div class="header-container">
+            <div class="header-main">
+                <h1>PDF Merger</h1>
+                <div class="header-security">
+                    <p class="security-note">All processing happens securely in your browser. Your files are never uploaded to any server.</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <a href="#" id="privacy-link" class="privacy-link">Privacy Policy</a>
+            </div>
+        </div>
     </header>
 
     <main id="main-content" class="container">
-        <!-- Upload section -->
-        <section class="upload-section">
-            <h2 class="section-title">Upload Files</h2>
-            
-            <div class="drop-zone" 
-                 id="drop-zone" 
-                 role="button" 
-                 tabindex="0"
-                 aria-label="Upload PDF files" 
-                 aria-describedby="drop-zone-description">
-                <div class="drop-zone-prompt">
-                    <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                        <polyline points="17 8 12 3 7 8"></polyline>
-                        <line x1="12" y1="3" x2="12" y2="15"></line>
-                    </svg>
-                    <p id="drop-zone-description">Drag & drop PDF files here<br>or</p>
-                    <label for="file-input" class="file-input-label">Choose Files</label>
-                    <input type="file" id="file-input" multiple accept="application/pdf" class="file-input-hidden">
+        <!-- Two-column layout container -->
+        <div class="workflow-container">
+            <!-- Upload section - left column -->
+            <section class="upload-section">
+                <h2 class="section-title">Upload Files</h2>
+                
+                <div class="drop-zone" 
+                     id="drop-zone" 
+                     role="button" 
+                     tabindex="0"
+                     aria-label="Upload PDF files" 
+                     aria-describedby="drop-zone-description">
+                    <div class="drop-zone-prompt">
+                        <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        <p id="drop-zone-description">Drag & drop PDF files here<br>or</p>
+                        <label for="file-input" class="file-input-label">Choose Files</label>
+                        <input type="file" id="file-input" multiple accept="application/pdf" class="file-input-hidden">
+                    </div>
                 </div>
-            </div>
 
-            <!-- Update the file list container section to include reordering functionality -->
-            <div class="file-list-container">
-                <h3>Selected Files</h3>
-                <p class="file-list-instructions">Select a file and use the arrows to change the merge order</p>
-                <ul id="file-list" class="file-list" aria-live="polite"></ul>
-                <div class="file-actions">
-                    <button id="move-up" class="btn btn-sm" title="Move selected file up" disabled aria-label="Move selected file up in order">↑</button>
-                    <button id="move-down" class="btn btn-sm" title="Move selected file down" disabled aria-label="Move selected file down in order">↓</button>
-                    <button id="remove-selected" class="btn btn-sm" title="Remove selected file" disabled>×</button>
+                <!-- Improved file list container with side-by-side layout -->
+                <div class="file-list-container">
+                    <div class="file-list-header">
+                        <span class="file-counter-label">Files</span>
+                        <span id="file-counter" class="file-counter">0 files selected</span>
+                    </div>
+                    
+                    <!-- Two-column layout for files and controls -->
+                    <div class="file-management-layout">
+                        <!-- File list on the left -->
+                        <div class="file-list-wrapper">
+                            <ul id="file-list" class="file-list" aria-live="polite"></ul>
+                        </div>
+                        
+                        <!-- Order controls on the right -->
+                        <div class="reorder-controls">
+                            <p class="reorder-title">Change<br>Order</p>
+                            <div class="reorder-buttons">
+                                <button id="move-up" class="reorder-btn reorder-up" title="Move selected file up" disabled aria-label="Move selected file up in order">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="18 15 12 9 6 15"></polyline>
+                                    </svg>
+                                </button>
+                                <button id="move-down" class="reorder-btn reorder-down" title="Move selected file down" disabled aria-label="Move selected file down in order">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <div class="actions">
-                <button id="clear-files" class="btn btn-secondary" type="button">Clear All</button>
-                <button id="merge-button" class="btn btn-primary" type="button" disabled>Merge PDFs</button>
-            </div>
-        </section>
+                <!-- Update the action buttons in upload section -->
+                <div class="actions">
+                    <button id="clear-files-main" class="btn btn-outline" type="button">Clear All</button>
+                    <button id="merge-button" class="btn btn-primary" type="button" disabled>Merge PDFs</button>
+                </div>
+            </section>
 
-        <!-- Results section -->
-        <section id="results-section" class="results-section hidden">
-            <div class="results-container">
-                <h2>Your PDF is Ready!</h2>
-                <div class="pdf-preview" id="pdf-preview" role="region" aria-label="PDF preview"></div>
-                <div class="download-info">
-                    <p id="file-info">File size: <span id="file-size">--</span></p>
-                    <a id="download-link" class="btn btn-success" download="merged.pdf">Download Merged PDF</a>
-                    <button id="start-over" class="btn btn-secondary" type="button">Start Over</button>
+            <!-- Results section - right column -->
+            <section id="results-section" class="results-section initially-inactive">
+                <!-- Update the download-info section structure -->
+                <div class="results-container">
+                    <h2 class="section-title">Your PDF</h2>
+                    <div class="pdf-preview" id="pdf-preview" role="region" aria-label="PDF preview">
+                        <!-- Make the placeholder message clearer -->
+                        <div class="no-preview-message">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="12" y1="18" x2="12" y2="12"></line>
+                                <line x1="9" y1="15" x2="15" y2="15"></line>
+                            </svg>
+                            <p>Merged PDF will be displayed here</p>
+                        </div>
+                    </div>
+                    
+                    <!-- File size info - hidden initially -->
+                    <p id="file-info" class="file-info hidden">File size: <span id="file-size">--</span></p>
+                    
+                    <!-- Download actions container -->
+                    <div class="download-info">
+                        <div class="download-actions">
+                            <a id="download-link" class="btn btn-success disabled" download="merged.pdf">Download PDF</a>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </section>
-        
-        <!-- How it works section -->
-        <section class="how-it-works">
-            <h2>How It Works</h2>
-            <div class="steps">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <h3>Upload Files</h3>
-                    <p>Select multiple PDF files or drag and drop them into the upload area</p>
-                </div>
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <h3>Merge PDFs</h3>
-                    <p>Click the "Merge PDFs" button to combine all files into one document</p>
-                </div>
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <h3>Download Result</h3>
-                    <p>Preview and download your merged PDF file</p>
-                </div>
-            </div>
-        </section>
+            </section>
+        </div>
     </main>
 
-    <!-- Loading overlay -->
-    <div id="loading-overlay" class="loading-overlay hidden" role="alertdialog" aria-busy="true" aria-label="Processing">
-        <div class="spinner" aria-hidden="true"></div>
-        <p>Merging your PDFs...</p>
-    </div>
-
-    <footer>
-        <div class="footer-content">
-            <p class="security-note"><strong>🔒 Secure Processing:</strong> Your files are processed entirely in your browser. Nothing is uploaded to any server.</p>
-            <p class="copyright">&copy; 2025 PDF Merger | <a href="#privacy-policy" id="privacy-link">Privacy Policy</a></p>
-        </div>
-    </footer>
-
-    <!-- Privacy modal -->
-    <div id="privacy-modal" class="modal hidden" role="dialog" aria-labelledby="privacy-title" aria-hidden="true">
+    <!-- Replace with the modern dialog element -->
+    <dialog id="privacy-modal" class="modal">
         <div class="modal-content">
-            <span class="close-modal" aria-label="Close">&times;</span>
-            <h2 id="privacy-title">Privacy Policy</h2>
-            <p>This PDF Merger tool processes all files directly in your web browser. We do not upload, store, or transmit your files to any server. All processing happens locally on your device.</p>
-            <p>We collect no personal data, do not use cookies, and do not track your usage of this tool.</p>
-            <div class="technical-details">
-                <h3>Technical Implementation</h3>
-                <ul>
-                    <li><strong>No Server Communication:</strong> This application has no backend server component.</li>
-                    <li><strong>Local Processing:</strong> All PDF merging happens using JavaScript libraries (pdf-lib.js and pdf.js) that execute in your browser.</li>
-                    <li><strong>No Storage:</strong> We don't use cookies, localStorage, or IndexedDB to store any information.</li>
-                    <li><strong>Network Monitoring:</strong> The application includes visible indicators when any network activity occurs.</li>
-                    <li><strong>Source Code:</strong> <a href="https://github.com/yourusername/pdf-merger" target="_blank">View our source code</a> to verify these privacy claims.</li>
-                </ul>
-            </div>
+            <button class="close-modal" aria-label="Close privacy policy">&times;</button>
+            <h2>Privacy Policy</h2>
+            <p>PDF Merger respects your privacy. All PDF processing happens entirely in your web browser.</p>
+            <p>We do not collect, store, or transmit your PDF files or any data contained within them to any server.</p>
+            <p>We use anonymous analytics to understand how the application is used, but this information cannot be linked to any individual user or file content.</p>
         </div>
+    </dialog>
+
+    <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="spinner"></div>
+        <p>Merging PDFs...</p>
     </div>
 
-    <!-- Add this before your existing scripts -->
-    <script>
-        // File type validation helper
-        window.validatePdfFile = function(file) {
-            // Check MIME type
-            if (file.type !== 'application/pdf') {
-                return false;
-            }
-            
-            // Check file extension
-            const fileExtension = file.name.split('.').pop().toLowerCase();
-            if (fileExtension !== 'pdf') {
-                return false;
-            }
-            
-            return true;
-        };
-    </script>
-
-    <!-- Data safety monitoring script -->
-    <script>
-        // Clear browser storage when app starts and finishes
-        window.addEventListener('DOMContentLoaded', () => {
-            // Clear any potential storage
-            localStorage.clear();
-            sessionStorage.clear();
-            
-            // Clear IndexedDB if present
-            window.indexedDB.databases().then(dbs => {
-                dbs.forEach(db => window.indexedDB.deleteDatabase(db.name));
-            }).catch(() => {});
-            
-            // Clear cache storage if possible
-            if ('caches' in window) {
-                caches.keys().then(names => {
-                    names.forEach(name => caches.delete(name));
-                });
-            }
-        });
-        
-        // Remove the offline processing indicator code
-        
-        // Monitor network requests without offline messaging
-        const originalFetch = window.fetch;
-        window.fetch = function() {
-            console.log("Network request detected");
-            return originalFetch.apply(this, arguments);
-        };
-    </script>
-
-    <!-- Scripts with optimization attributes -->
+    <!-- Scripts -->
     <script src="lib/pdf-lib.min.js" defer></script>
     <script src="lib/pdf.js" defer></script>
     <script src="js/fileUtils.js" defer></script>
