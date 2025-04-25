@@ -49,6 +49,8 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       `;
       
+      li.addEventListener('click', handleFileSelection);
+      
       fileList.appendChild(li);
     });
     
@@ -200,4 +202,82 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Initialize the file list
   updateFileList();
+  
+  // Variables for file reordering
+  let selectedFileItem = null;
+
+  // Function to handle file selection for reordering
+  function handleFileSelection(e) {
+    // Remove selection from previously selected item
+    if (selectedFileItem) {
+      selectedFileItem.classList.remove('selected');
+    }
+    
+    // Set new selected item
+    selectedFileItem = e.currentTarget;
+    selectedFileItem.classList.add('selected');
+    
+    // Enable or disable buttons based on position
+    const moveUpBtn = document.getElementById('move-up');
+    const moveDownBtn = document.getElementById('move-down');
+    const removeBtn = document.getElementById('remove-selected');
+    
+    const fileItems = Array.from(document.getElementById('file-list').children);
+    const selectedIndex = fileItems.indexOf(selectedFileItem);
+    
+    moveUpBtn.disabled = selectedIndex === 0;
+    moveDownBtn.disabled = selectedIndex === fileItems.length - 1;
+    removeBtn.disabled = false;
+  }
+
+  // Add click handlers for the move up/down buttons
+  document.getElementById('move-up').addEventListener('click', function() {
+    if (!selectedFileItem || selectedFileItem.previousElementSibling === null) return;
+    
+    // Get the file list and the selected item's index
+    const fileList = document.getElementById('file-list');
+    const fileItems = Array.from(fileList.children);
+    const selectedIndex = fileItems.indexOf(selectedFileItem);
+    
+    // Swap in the DOM
+    fileList.insertBefore(selectedFileItem, selectedFileItem.previousElementSibling);
+    
+    // Swap in the files array (assuming you store uploaded files in a 'files' array)
+    if (window.uploadedFiles && selectedIndex > 0) {
+      const temp = window.uploadedFiles[selectedIndex];
+      window.uploadedFiles[selectedIndex] = window.uploadedFiles[selectedIndex - 1];
+      window.uploadedFiles[selectedIndex - 1] = temp;
+    }
+    
+    // Update button states
+    this.disabled = selectedFileItem.previousElementSibling === null;
+    document.getElementById('move-down').disabled = selectedFileItem.nextElementSibling === null;
+  });
+
+  document.getElementById('move-down').addEventListener('click', function() {
+    if (!selectedFileItem || selectedFileItem.nextElementSibling === null) return;
+    
+    // Get the file list and the selected item's index
+    const fileList = document.getElementById('file-list');
+    const fileItems = Array.from(fileList.children);
+    const selectedIndex = fileItems.indexOf(selectedFileItem);
+    
+    // Swap in the DOM (have to use the next next element as reference for insertBefore)
+    if (selectedFileItem.nextElementSibling.nextElementSibling) {
+      fileList.insertBefore(selectedFileItem, selectedFileItem.nextElementSibling.nextElementSibling);
+    } else {
+      fileList.appendChild(selectedFileItem);
+    }
+    
+    // Swap in the files array
+    if (window.uploadedFiles && selectedIndex < window.uploadedFiles.length - 1) {
+      const temp = window.uploadedFiles[selectedIndex];
+      window.uploadedFiles[selectedIndex] = window.uploadedFiles[selectedIndex + 1];
+      window.uploadedFiles[selectedIndex + 1] = temp;
+    }
+    
+    // Update button states
+    this.disabled = selectedFileItem.nextElementSibling === null;
+    document.getElementById('move-up').disabled = selectedFileItem.previousElementSibling === null;
+  });
 });
